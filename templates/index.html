@@ -9,6 +9,7 @@
 <body>
     <div id="game-container">
         <h1>Solitaire</h1>
+        
         <div id="foundations">
             <!-- Foundation piles (home piles for suits) -->
             {% for suit in ['hearts', 'diamonds', 'clubs', 'spades'] %}
@@ -22,12 +23,13 @@
         <div id="tableau">
             <!-- Tableau piles (main playing area) -->
             {% for i in range(7) %}
-                <div class="tableau-pile" id="tableau-pile-{{ i }}">
+                <div class="tableau-pile" id="tableau-pile-{{ i }}" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <h3>Pile {{ i + 1 }}</h3>
                     <div class="pile">
                         {% for card in game_state['tableau'][i] %}
-                            <div class="card" data-suit="{{ card['suit'] }}" data-rank="{{ card['rank'] }}">
-                                <img src="{{ card['image'] }}" alt="{{ card['rank'] }} of {{ card['suit'] }}">
+                            <div class="card" id="card-{{ card['rank'] }}-{{ card['suit'] }}" draggable="true" ondragstart="drag(event)" data-suit="{{ card['suit'] }}" data-rank="{{ card['rank'] }}">
+                                <!-- Correct image path for card faces -->
+                                <img src="{{ url_for('static', filename='images/card_fronts/' + card['suit'] + card['rank'] + '.jpg') }}" alt="{{ card['rank'] }} of {{ card['suit'] }}">
                             </div>
                         {% endfor %}
                     </div>
@@ -39,7 +41,8 @@
             <!-- Stock pile -->
             <h3>Stock</h3>
             <div class="pile" id="stock-pile">
-                <img src="./static/images/card_backs/back2.jpg" alt="Stock" class="card-back">
+                <!-- Correct image path for card back -->
+                <img src="{{ url_for('static', filename='images/card_backs/back2.jpg') }}" alt="Stock" class="card-back">
             </div>
         </div>
 

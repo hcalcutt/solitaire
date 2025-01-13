@@ -41,6 +41,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadGame(data);
             });
     });
+    document.addEventListener('DOMContentLoaded', function() {
+        const stockPile = document.getElementById('stock-pile');
+        const tableau = document.querySelectorAll('.tableau-pile .pile');
+    
+        // Draw a card from the stock
+        stockPile.addEventListener('click', function() {
+            // Simulate drawing a card from stock (for simplicity, just pick the top card)
+            const cardToDraw = stockPile.querySelector('img');
+    
+            // Check if there are cards left in the stock
+            if (cardToDraw) {
+                const cardImage = cardToDraw.cloneNode(true);
+                tableau[0].appendChild(cardImage); // For now, place it in the first tableau pile
+            }
+        });
+    });
+    
+// Function to allow drop on tableau piles
+function allowDrop(event) {
+    event.preventDefault(); // Prevent default behavior (required for drop)
+}
+
+// Function to handle the start of a drag
+function drag(event) {
+    // Store the card that is being dragged in the event's dataTransfer
+    event.dataTransfer.setData("cardId", event.target.id);
+}
+
+// Function to handle the drop event
+function drop(event) {
+    event.preventDefault();
+    
+    // Get the id of the dragged card
+    const cardId = event.dataTransfer.getData("cardId");
+    const draggedCard = document.getElementById(cardId);
+    
+    // Get the card's rank and suit from the dragged card's data attributes
+    const rank = draggedCard.getAttribute('data-rank');
+    const suit = draggedCard.getAttribute('data-suit');
+    
+    // Append the card to the new pile (if this is a valid move based on the rules)
+    const targetPile = event.target.closest('.tableau-pile').querySelector('.pile');
+    targetPile.appendChild(draggedCard);
+
+    // Optionally: You can check here whether the move is valid and update the game state accordingly
+}
 
     // Initialize the game
     fetch('/')
