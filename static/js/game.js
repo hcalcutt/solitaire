@@ -1,50 +1,51 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const deckContainer = document.getElementById('deck');
     const newGameBtn = document.getElementById('new-game-btn');
+    const stockPile = document.getElementById('stock-pile');
 
-    function loadDeck(deck) {
-        deckContainer.innerHTML = '';  // Clear previous deck
+    // Load game state and render tableau
+    function loadGame(gameState) {
+        const tableau = gameState.tableau;
+        const foundations = gameState.foundations;
 
-        deck.forEach(card => {
-            const cardElement = document.createElement('div');
-            cardElement.classList.add('card');
-            cardElement.dataset.rank = card.rank;
-            cardElement.dataset.suit = card.suit;
-
-            const cardFront = document.createElement('img');
-            cardFront.src = card.image;
-            cardElement.appendChild(cardFront);
-
-            cardElement.addEventListener('click', function() {
-                flipCard(cardElement);
+        // Render tableau
+        tableau.forEach((pile, index) => {
+            const pileElement = document.getElementById(`tableau-pile-${index}`);
+            pileElement.innerHTML = ''; // Clear previous pile
+            pile.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.dataset.rank = card.rank;
+                cardElement.dataset.suit = card.suit;
+                const img = document.createElement('img');
+                img.src = card.image;
+                cardElement.appendChild(img);
+                pileElement.appendChild(cardElement);
             });
-
-            deckContainer.appendChild(cardElement);
         });
+
+        // Render foundations
+        Object.keys(foundations).forEach(suit => {
+            const foundationElement = document.getElementById(`foundation-${suit}`);
+            foundationElement.querySelector('.pile').innerHTML = ''; // Clear previous pile
+        });
+
+        // Render stock pile (display the back of the cards)
+        stockPile.querySelector('img').src = './static/images/card_backs/back2.jpg';
     }
 
-    function flipCard(cardElement) {
-        const img = cardElement.querySelector('img');
-        if (img.src.includes('back2.jpg')) {
-            img.src = `./static/images/card_fronts/${cardElement.dataset.suit}${cardElement.dataset.rank}.jpg`;
-        } else {
-            img.src = './static/images/card_backs/back2.jpg';
-        }
-    }
-
+    // Start a new game
     newGameBtn.addEventListener('click', function() {
         fetch('/new_game')
             .then(response => response.json())
             .then(data => {
-                loadDeck(data.deck);
+                loadGame(data);
             });
     });
 
-    // Initialize with a shuffled deck
+    // Initialize the game
     fetch('/')
-        .then(response => response.text())
-        .then(html => {
-            const deck = JSON.parse(html).deck;
-            loadDeck(deck);
+        .then(response => response.json())
+        .then(data => {
+            loadGame(data);
         });
 });

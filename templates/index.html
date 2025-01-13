@@ -9,9 +9,40 @@
 <body>
     <div id="game-container">
         <h1>Solitaire</h1>
-        <div id="deck" class="card-container">
-            <!-- Cards will be displayed here -->
+        <div id="foundations">
+            <!-- Foundation piles (home piles for suits) -->
+            {% for suit in ['hearts', 'diamonds', 'clubs', 'spades'] %}
+                <div class="foundation-pile" id="foundation-{{ suit }}">
+                    <h3>{{ suit.capitalize() }}</h3>
+                    <div class="pile"></div>
+                </div>
+            {% endfor %}
         </div>
+
+        <div id="tableau">
+            <!-- Tableau piles (main playing area) -->
+            {% for i in range(7) %}
+                <div class="tableau-pile" id="tableau-pile-{{ i }}">
+                    <h3>Pile {{ i + 1 }}</h3>
+                    <div class="pile">
+                        {% for card in game_state['tableau'][i] %}
+                            <div class="card" data-suit="{{ card['suit'] }}" data-rank="{{ card['rank'] }}">
+                                <img src="{{ card['image'] }}" alt="{{ card['rank'] }} of {{ card['suit'] }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div id="stock">
+            <!-- Stock pile -->
+            <h3>Stock</h3>
+            <div class="pile" id="stock-pile">
+                <img src="./static/images/card_backs/back2.jpg" alt="Stock" class="card-back">
+            </div>
+        </div>
+
         <button id="new-game-btn">New Game</button>
     </div>
 

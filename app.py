@@ -17,17 +17,33 @@ def generate_deck():
     random.shuffle(deck)
     return deck
 
+# Distribute the cards into tableau and stock
+def setup_game():
+    deck = generate_deck()
+    
+    # Tableau has 7 piles, each with a different number of cards
+    tableau = [deck[i:i + n] for i, n in zip(range(0, 28, 1), [1, 2, 3, 4, 5, 6, 7])]
+    # Remaining cards go into stock pile
+    stock = deck[28:]
+
+    game_state = {
+        'tableau': tableau,
+        'stock': stock,
+        'foundations': {suit: [] for suit in suits}  # Empty foundations for each suit
+    }
+    return game_state
+
 @app.route('/')
 def index():
-    # Create and shuffle a deck of cards
-    deck = generate_deck()
-    return render_template('index.html', deck=deck)
+    # Setup a new game
+    game_state = setup_game()
+    return render_template('index.html', game_state=game_state)
 
 @app.route('/new_game')
 def new_game():
-    # Create and shuffle a new deck of cards
-    deck = generate_deck()
-    return jsonify({'deck': deck})
+    # Setup a new game and return the initial game state
+    game_state = setup_game()
+    return jsonify(game_state)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -5,11 +5,7 @@ body {
     text-align: center;
 }
 
-#game-container {
-    margin: 50px auto;
-    width: 80%;
-    max-width: 900px;
-}
+
 
 .card-container {
     display: flex;
@@ -18,18 +14,8 @@ body {
     gap: 10px;
 }
 
-.card {
-    width: 100px;
-    height: 140px;
-    background-image: url('./static/images/card_backs/backs2.jpg');
-    background-size: cover;
-    cursor: pointer;
-}
 
-.card img {
-    width: 100%;
-    height: 140px;
-}
+
 
 button {
     background-color: #3498db;
@@ -43,4 +29,55 @@ button {
 
 button:hover {
     background-color: #2980b9;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2e3b4e;
+    color: white;
+    text-align: center;
+}
+
+#game-container {
+    margin: 50px auto;
+    width: 80%;
+    max-width: 900px;
+}
+
+#foundations {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.foundation-pile {
+    width: 100px;
+    height: 140px;
+    border: 2px solid #fff;
+}
+
+#tableau {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.tableau-pile {
+    width: 120px;
+    height: auto;
+}
+
+.card {
+    width: 100px;
+    height: 140px;
+    background-image: url('./static/images/card_backs/back2.jpg');
+    background-size: cover;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.card img {
+    width: 100%;
+    height: 140px;
 }
